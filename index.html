@@ -1,8 +1,44 @@
-<html>
-  <head>
-    <title></title>
-    <meta content="">
-    <style></style>
-  </head>
-  <body></body>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Neighborhood Map Project</title>
+  <meta name="author" content="Arthur Jordão">
+  <meta name="description" content="A map with highlighted locations, third party data etc">
+  <meta name="keywords" content="map,neighborhood">
+  <link rel="stylesheet" href="css/navbar.css">
+  <style type="text/css">
+      html, body { height: 100%; margin: 0; padding: 0; background-color: #111; }
+      #map { height: 100%; }
+      main { height: calc(100% - 40px) }
+    </style>
+</head>
+
+<body>
+  <div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <div>
+      Av. Comandante Sampaio, 844
+    </div>
+    <form>
+      <input type="text">
+      <button type="submit">Filter</button>
+    </form>
+  </div>
+  <span onclick="openNav()" class="open-nav-button">&#9776;</span>
+  <main>
+    <div id="map"></div>
+  </main>
+  
+  <script src="js/libs/jquery.min.js"></script>
+  <script src="js/libs/knockout.js"></script>
+  <script src="js/navbar.js"></script>
+  <script src="js/maps.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQdWmtjN4I8ev6zMPJU7oTx_x6aInPifw&callback=initialize&libraries=places"
+    async defer></script>
+</body>
+
 </html>

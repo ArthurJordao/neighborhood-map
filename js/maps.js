@@ -6,8 +6,10 @@ function initialize() {
   var map = new google.maps.Map(document.getElementById('map'), {
     center: pyrmont,
     zoom: 15,
-    scrollwheel: false
+    scrollwheel: true
   });
+
+  app.map = map;
 
   // Specify location, radius and place types for your Places API search.
   var request = {
@@ -19,7 +21,6 @@ function initialize() {
   // Create the PlaceService and send the request.
   // Handle the callback with an anonymous function.
   var service = new google.maps.places.PlacesService(map);
-  var infowindow = new google.maps.InfoWindow();
   service.nearbySearch(request, function (results, status) {
     app.locations = [];
     if (status == google.maps.places.PlacesServiceStatus.OK) {
@@ -32,11 +33,7 @@ function initialize() {
           map: map,
           position: place.geometry.location
         });
-        google.maps.event.addListener(marker, 'click', function() {
-          map.setCenter(marker.getPosition());
-          infowindow.setContent(place.name);
-          infowindow.open(map, this);
-        });
+        
         app.locations.push({
           marker: marker,
           place_name: place.name

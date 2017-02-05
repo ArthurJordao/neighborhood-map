@@ -12,7 +12,7 @@ function initialize() {
   // Specify location, radius and place types for your Places API search.
   var request = {
     location: pyrmont,
-    radius: '100',
+    radius: '10000',
     types: ['park']
   };
 
@@ -20,9 +20,8 @@ function initialize() {
   // Handle the callback with an anonymous function.
   var service = new google.maps.places.PlacesService(map);
   var infowindow = new google.maps.InfoWindow();
-
   service.nearbySearch(request, function (results, status) {
-    app.makers = ko.observableArray();
+    app.locations = [];
     if (status == google.maps.places.PlacesServiceStatus.OK) {
       for (var i = 0; i < results.length; i++) {
         var place = results[i];
@@ -34,10 +33,14 @@ function initialize() {
           position: place.geometry.location
         });
         google.maps.event.addListener(marker, 'click', function() {
+          map.setCenter(marker.getPosition());
           infowindow.setContent(place.name);
           infowindow.open(map, this);
         });
-        app.makers.push(marker);
+        app.locations.push({
+          marker: marker,
+          place_name: place.name
+        });
       }
     }
   });

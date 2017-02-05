@@ -27,6 +27,9 @@
       <input type="text">
       <button type="submit">Filter</button>
     </form>
+    <div data-bind="foreach: locations">
+      <a href="#"  data-bind="text: place_name, click: $parent.showMarker"></a>
+    </div>
   </div>
   <span onclick="openNav()" class="open-nav-button">&#9776;</span>
   <main>
@@ -39,6 +42,7 @@
   <script src="js/maps.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQdWmtjN4I8ev6zMPJU7oTx_x6aInPifw&callback=initialize&libraries=places"
     async defer></script>
+  <script src="js/main.js"></script>
 </body>
 
 </html>

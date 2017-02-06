@@ -14,8 +14,8 @@ function initialize() {
   // Specify location, radius and place types for your Places API search.
   var request = {
     location: pyrmont,
-    radius: '10000',
-    types: ['park']
+    radius: '5000',
+    types: ['park', 'bar', 'store']
   };
 
   // Create the PlaceService and send the request.

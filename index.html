@@ -10,22 +10,18 @@
   <meta name="description" content="A map with highlighted locations, third party data etc">
   <meta name="keywords" content="map,neighborhood">
   <link rel="stylesheet" href="css/navbar.css">
-  <style type="text/css">
-      html, body { height: 100%; margin: 0; padding: 0; background-color: #111; }
-      #map { height: 100%; }
-      main { height: calc(100% - 40px) }
-    </style>
+  <link rel="stylesheet" href="css/main.css">
 </head>
 
 <body>
   <div id="mySidenav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
     <div>
-      Av. Comandante Sampaio, 844
+      Google Sydney
     </div>
     <form>
       <input type="text" id="filter">
-      <button type="submit">Filter</button>
+      <button type="submit" data-bind="click: filter">Filter</button>
     </form>
     <div data-bind="foreach: locations">
       <a href="#"  data-bind="text: place_name, click: $parent.showMarker"></a>

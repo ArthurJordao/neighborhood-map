@@ -2,7 +2,7 @@ setTimeout(function () {
     app = app || {};
 
     function fillWindow(place_name) {
-        var content_obj = {content: '<h3>' + place_name + '</h3>'};
+        var content_obj = { content: '<h3>' + place_name + '</h3>' };
         var wikiURL = "https://en.wikipedia.org/w/api.php";
         wikiURL += '?' + $.param({
             action: "opensearch",
@@ -29,7 +29,7 @@ setTimeout(function () {
                 };
                 content_obj.content = content_obj.content.concat('</ul>');
                 $('.marker-content').html(content_obj.content);
-            }).fail(function() {
+            }).fail(function () {
                 content_obj.content += '<h4>we cannot get the wiki links</h4>';
                 $('.marker-content').html(content_obj.content);
             });
@@ -55,14 +55,31 @@ setTimeout(function () {
 
     var ViewModel = function (locations) {
         self = this;
-        this.locations = ko.observableArray(locations);
+        this.locations = ko.observableArray([].concat(locations));
         this.showMarker = function (location) {
             google.maps.event.trigger(location.marker, 'click');
         }
         this.filter = function () {
             self.locations.removeAll();
-            var filter = $('#filter');
-
+            var filter = $('#filter').val();
+            if (!filter) {
+                for (i in app.locations) {
+                    var location = app.locations[i];
+                    location.marker.setVisible(true);
+                    self.locations.push(location);
+                }
+            } else {
+                var filter_reg = new RegExp(filter, 'gi');
+                for (i in app.locations) {
+                    var location = app.locations[i];
+                    if (location.place_name.match(filter_reg)) {
+                        location.marker.setVisible(true);
+                        self.locations.push(location);
+                    } else {
+                        location.marker.setVisible(false);
+                    }
+                }
+            }
         }
     }
     ko.applyBindings(new ViewModel(app.locations));

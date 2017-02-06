@@ -1,7 +1,7 @@
 setTimeout(function () {
     app = app || {};
 
-    function content(place_name) {
+    function fillWindow(place_name) {
         var content_obj = {content: '<h3>' + place_name + '</h3>'};
         var wikiURL = "https://en.wikipedia.org/w/api.php";
         wikiURL += '?' + $.param({
@@ -16,18 +16,24 @@ setTimeout(function () {
                 dataType: 'jsonp'
             }).done(function (response) {
                 var articleList = response[1];
+                content_obj.content = content_obj.content.concat('<h4>Wikipedia links</h4>');
+                if (articleList.length == 0) {
+                    content_obj.content = content_obj.content.concat('<p>No links for this location</p>');
+                }
+                content_obj.content = content_obj.content.concat('<ul>');
                 for (var i = 0; i < articleList.length; i++) {
                     articleStr = articleList[i];
                     var url = 'http://en.wikipedia.org/wiki/' + articleStr;
                     content_obj.content = content_obj.content.concat('<li><a href="' + url + '">' +
                         articleStr + '</a></li>');
                 };
-                console.log(content_obj.content);
-            }).fail(function(e) {
-                console.log(e);
+                content_obj.content = content_obj.content.concat('</ul>');
+                $('.marker-content').html(content_obj.content);
+            }).fail(function() {
+                content_obj.content += '<h4>we cannot get the wiki links</h4>';
+                $('.marker-content').html(content_obj.content);
             });
         }
-        return content_obj.content;
     }
 
     for (i in app.locations) {
@@ -38,9 +44,11 @@ setTimeout(function () {
         var map = app.map;
         with ({ place_name: location.place_name }) {
             google.maps.event.addListener(marker, 'click', function () {
+                $('.marker-content').html('');
                 map.setCenter(marker.getPosition());
-                infowindow.setContent(content(place_name));
+                infowindow.setContent('<div class="marker-content"></div>');
                 infowindow.open(map, this);
+                fillWindow(place_name)
             });
         }
     }

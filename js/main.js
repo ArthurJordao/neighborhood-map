@@ -1,7 +1,8 @@
 setTimeout(function () {
     app = app || {};
 
-    function fillWindow(place_name) {
+    //This function put a content in the map window
+    function fillWindow(place_name, marker) {
         var content_obj = { content: '<h3>' + place_name + '</h3>' };
         var wikiURL = "https://en.wikipedia.org/w/api.php";
         wikiURL += '?' + $.param({
@@ -33,26 +34,39 @@ setTimeout(function () {
                 content_obj.content += '<h4>we cannot get the wiki links</h4>';
                 $('.marker-content').html(content_obj.content);
             });
+            var position = marker.getPosition();
+            var urlMapsImagem = 'https://maps.googleapis.com/maps/api/streetview?' + $.param({
+                size: '300x150',
+                location: marker.getPosition().lat() + ',' + marker.getPosition().lng(),
+                heading: 100,
+                pitch: 28,
+                scale: 2,
+                key: 'AIzaSyBQdWmtjN4I8ev6zMPJU7oTx_x6aInPifw'
+            })
+              $(document).ajaxStop(function () {
+                $('.marker-img').html('<img src="' + urlMapsImagem + '" alt="Photo of"' + place_name + '>');
+            });
         }
     }
-
+    // add a listener to the markers and put a link to them in the side bar
     for (i in app.locations) {
         app.current_location += 1;
         var location = app.locations[i];
         var marker = location.marker;
         var infowindow = new google.maps.InfoWindow();
         var map = app.map;
-        with ({ place_name: location.place_name }) {
+        with ({ place_name: location.place_name, marker: marker }) {
             google.maps.event.addListener(marker, 'click', function () {
-                $('.marker-content').html('');
                 map.setCenter(marker.getPosition());
-                infowindow.setContent('<div class="marker-content"></div>');
                 infowindow.open(map, this);
-                fillWindow(place_name)
+                $('.marker-content').html('');
+                infowindow.setContent('<div class="marker-content"></div><div class="marker-img"></div>');
+                fillWindow(place_name, marker)
             });
         }
     }
 
+    // this ViewModel provide a list of locations and some functions
     var ViewModel = function (locations) {
         self = this;
         this.locations = ko.observableArray([].concat(locations));
@@ -83,4 +97,4 @@ setTimeout(function () {
         }
     }
     ko.applyBindings(new ViewModel(app.locations));
-}, 1000)
+}, 2000) //wait map load

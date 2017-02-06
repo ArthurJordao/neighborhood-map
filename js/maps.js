@@ -33,6 +33,7 @@ function initialize() {
           map: map,
           position: place.geometry.location
         });
+        marker.setAnimation(null);
         
         app.locations.push({
           marker: marker,

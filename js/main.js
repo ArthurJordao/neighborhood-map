@@ -62,6 +62,11 @@ setTimeout(function () {
                 $('.marker-content').html('');
                 infowindow.setContent('<div class="marker-content"></div><div class="marker-img"></div>');
                 fillWindow(place_name, marker)
+                if (marker.getAnimation() !== null) {
+                    marker.setAnimation(null);
+                } else {
+                    marker.setAnimation(google.maps.Animation.BOUNCE);
+                }
             });
         }
     }

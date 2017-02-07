@@ -40,6 +40,7 @@ function initModel() {
 
 //This function put a content in the map window
 function fillWindow(place_name, marker, infowindow) {
+    infowindow.setContent('');
     infowindow.setContent('<h3>' + place_name + '</h3>');
     var wikiURL = "https://en.wikipedia.org/w/api.php";
     wikiURL += '?' + $.param({
@@ -67,17 +68,17 @@ function fillWindow(place_name, marker, infowindow) {
         infowindow.setContent(infowindow.getContent() + '</ul>');
     }).fail(function () {
         infowindow.setContent(infowindow.getContent() + '<h4>we cannot get the wiki links</h4>');
-    });
-    var position = marker.getPosition();
-    var urlMapsImagem = 'https://maps.googleapis.com/maps/api/streetview?' + $.param({
-        size: '300x150',
-        location: marker.getPosition().lat() + ',' + marker.getPosition().lng(),
-        heading: 100,
-        pitch: 28,
-        scale: 2,
-        key: 'AIzaSyBQdWmtjN4I8ev6zMPJU7oTx_x6aInPifw'
-    });
-    $(document).ajaxStop(function () {
+    }).always(function () {
+        var position = marker.getPosition();
+        var urlMapsImagem = 'https://maps.googleapis.com/maps/api/streetview?' + $.param({
+            size: '300x150',
+            location: position.lat() + ',' + position.lng(),
+            heading: 100,
+            pitch: 28,
+            scale: 2,
+            key: 'AIzaSyBQdWmtjN4I8ev6zMPJU7oTx_x6aInPifw'
+        });
+        infowindow.setContent(infowindow.getContent() + '<h4>Local photo</h4>');
         infowindow.setContent(infowindow.getContent() + '<img src="' + urlMapsImagem + '" alt="Photo of"' + place_name + '>');
     });
 }
